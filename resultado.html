@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Resultado del Examen</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
   <style>
-    .correcta { background-color: #d4edda; }
-    .incorrecta { background-color: #f8d7da; }
+    .correcta { background-color: #d4edda; padding: 10px; border-radius: 5px; }
+    .incorrecta { background-color: #f8d7da; padding: 10px; border-radius: 5px; }
   </style>
 </head>
 <body>
@@ -27,7 +27,7 @@
   </footer>
 
   <script>
-    const respuestasCorrectas = {
+    const correctas = {
       q1: "&lt;h1&gt;",
       q2: "CSS",
       q3: "&lt;table&gt;",
@@ -50,29 +50,23 @@
       q20: "click"
     };
 
-    function mostrarResultados() {
-      const params = new URLSearchParams(window.location.search);
-      let totalCorrectas = 0;
-      let contenido = '<ol>';
+    const params = new URLSearchParams(window.location.search);
+    let correctasTotales = 0;
+    let contenido = "<ol>";
 
-      Object.entries(respuestasCorrectas).forEach(([clave, valor], index) => {
-        const userResp = params.get(clave) || "(sin responder)";
-        const correcta = userResp === valor;
-        totalCorrectas += correcta ? 1 : 0;
-        contenido += `
-          <li class="${correcta ? 'correcta' : 'incorrecta'}">
-            Pregunta ${index + 1}: <strong>${userResp}</strong><br>
-            ${correcta ? '✅ Correcta' : `❌ Incorrecta. Respuesta correcta: <strong>${valor}</strong>`}
-          </li>
-        `;
-      });
+    Object.entries(correctas).forEach(([key, correcta], i) => {
+      const user = params.get(key) || "(sin responder)";
+      const acierto = user === correcta;
+      correctasTotales += acierto ? 1 : 0;
+      contenido += `
+        <li class="${acierto ? "correcta" : "incorrecta"}">
+          Pregunta ${i + 1}: <strong>${user}</strong><br>
+          ${acierto ? "✅ Correcta" : `❌ Incorrecta. Respuesta correcta: <strong>${correcta}</strong>`}
+        </li>`;
+    });
 
-      contenido += '</ol>';
-      contenido += `<p><strong>Puntaje final: ${totalCorrectas}/20</strong></p>`;
-      document.getElementById('resumen').innerHTML = contenido;
-    }
-
-    mostrarResultados();
+    contenido += `</ol><p><strong>Puntaje final: ${correctasTotales}/20</strong></p>`;
+    document.getElementById("resumen").innerHTML = contenido;
   </script>
 </body>
 </html>
