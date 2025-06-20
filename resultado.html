@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Resultado del Examen</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .correcta { background-color: #d4edda; }
+    .incorrecta { background-color: #f8d7da; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Resultado del Examen</h1>
+  </header>
+
+  <main>
+    <section id="resultado">
+      <h2>Revisá tus respuestas</h2>
+      <div id="resumen"></div>
+    </section>
+    <a href="examen.html"><button>Volver al Examen</button></a>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 - Examen de Algoritmia</p>
+  </footer>
+
+  <script>
+    const respuestasCorrectas = {
+      q1: "&lt;h1&gt;",
+      q2: "CSS",
+      q3: "&lt;table&gt;",
+      q4: "&lt;img&gt;",
+      q5: "required",
+      q6: "&lt;ul&gt;",
+      q7: "&lt;main&gt;",
+      q8: "protocolo://dominio/ruta",
+      q9: "JavaScript",
+      q10: "href",
+      q11: "&lt;th&gt;",
+      q12: "&amp;lt;",
+      q13: "File Transfer Protocol",
+      q14: "Relaciona texto con input",
+      q15: "Apache",
+      q16: "&lt;option&gt;",
+      q17: ".css",
+      q18: "color",
+      q19: "checkbox",
+      q20: "click"
+    };
+
+    function mostrarResultados() {
+      const params = new URLSearchParams(window.location.search);
+      let totalCorrectas = 0;
+      let contenido = '<ol>';
+
+      Object.entries(respuestasCorrectas).forEach(([clave, valor], index) => {
+        const userResp = params.get(clave) || "(sin responder)";
+        const correcta = userResp === valor;
+        totalCorrectas += correcta ? 1 : 0;
+        contenido += `
+          <li class="${correcta ? 'correcta' : 'incorrecta'}">
+            Pregunta ${index + 1}: <strong>${userResp}</strong><br>
+            ${correcta ? '✅ Correcta' : `❌ Incorrecta. Respuesta correcta: <strong>${valor}</strong>`}
+          </li>
+        `;
+      });
+
+      contenido += '</ol>';
+      contenido += `<p><strong>Puntaje final: ${totalCorrectas}/20</strong></p>`;
+      document.getElementById('resumen').innerHTML = contenido;
+    }
+
+    mostrarResultados();
+  </script>
+</body>
+</html>
